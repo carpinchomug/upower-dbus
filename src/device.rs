@@ -43,6 +43,17 @@ pub enum BatteryLevel {
     Full = 8,
 }
 
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash, Deserialize_repr, Serialize_repr, OwnedValue)]
+#[repr(u32)]
+pub enum WarningLevel {
+    Unknown = 0,
+    None = 1,
+    Discharging = 2,
+    Low = 3,
+    Critical = 4,
+    Action = 5,
+}
+
 #[dbus_proxy(
     interface = "org.freedesktop.UPower.Device",
     default_service = "org.freedesktop.UPower",
@@ -119,4 +130,7 @@ trait Device {
 
     #[dbus_proxy(property)]
     fn voltage(&self) -> zbus::Result<f64>;
+
+    #[dbus_proxy(property)]
+    fn warning_level(&self) -> zbus::Result<WarningLevel>;
 }
